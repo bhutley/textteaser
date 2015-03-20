@@ -18,6 +18,7 @@ setup(
     keywords = "summarisation",
     url = "https://github.com/DataTeaser/textteaser",
     packages=['textteaser'],
+    include_package_data=True,
     long_description=read('README.md'),
     classifiers=[
         "Development Status :: 3 - Alpha",
