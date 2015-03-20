@@ -2,16 +2,26 @@
 import sys
 import os
 from textteaser import TextTeaser
+import argparse
 
-if len(sys.argv) != 2 or not os.path.isfile(sys.argv[1]):
-    print("Usage: %s <filename.txt>" % (sys.argv[0], ))
-    print(" The first non-blank line of the file will be taken as the title")
-    exit(0)
+parser = argparse.ArgumentParser(description='Summarise a text file.')
+parser.add_argument('-c', dest='sentence_count', type=int, nargs='?', default=5,
+                   help='The number of sentences to summarise to')
+parser.add_argument('filename', 
+                   help='The file to process. The first non-blank line is interpreted as the title.')
 
+args = vars(parser.parse_args())
+
+sentence_count = args['sentence_count']
+filename = args['filename']
+
+if not os.path.isfile(filename):
+    parser.print_help()
+    exit(1)
+    
 title = None
 text = []
 
-filename = sys.argv[1]
 with open(filename, 'r') as f:
     for line in f:
         line = line.strip()
@@ -29,7 +39,7 @@ if title is None or len(text) == 0:
 
 tt = TextTeaser()
 
-sentences = tt.summarize(title, "\n".join(text))
+sentences = tt.summarize(title, "\n".join(text), count=sentence_count)
 
 for sentence in sentences:
   print sentence
